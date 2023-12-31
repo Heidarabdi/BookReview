@@ -1,0 +1,5 @@
+.text-background {
+    background-color: rgba(0, 0, 0, 0.5); /* black background with 50% opacity */
+    color: white; /* white text */
+    padding: 10px; /* some padding */
+}
