@@ -1,3 +1,21 @@
+<?php
+if(session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (isset($_SESSION['alert'])) {
+    $alertType = $_SESSION['alert']['type'] === 'error' ? 'red' : 'green';
+    echo '
+            <script>
+                alert("' . $_SESSION['alert']['message'] . '");
+            </script>
+    </div>
+    ';
+    unset($_SESSION['alert']); // remove the alert from the session
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,16 +32,16 @@
     <h1 class="text-4xl font-medium">Reset password</h1>
     <p class="text-slate-500">Fill up the form to reset the password</p>
 
-    <form action="" class="my-10">
+    <form class="my-10" action="../controllers/forgetController.php" method="POST" enctype="multipart/form-data">
         <div class="flex flex-col space-y-5">
             <label for="email">
                 <p class="font-medium text-slate-700 pb-2">Email address</p>
-                <input id="email" name="email" type="email" class="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow" placeholder="Enter email address">
+                <input required aria-required="true" id="email" name="email" type="email" class="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow" placeholder="Enter email address">
             </label>
             <!-- Secret question answer -->
-            <label for="secret-question">
-                <p class="font-medium text-slate-700 pb-2">Secret question</p>
-                <input id="secret-question" name="secret-question" type="text" class="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow" placeholder="Enter secret question">
+            <label for="secret-answer">
+                <p class="font-medium text-slate-700 pb-2">Secret answer</p>
+                <input required aria-required="true" id="secret-answer" name="secret-answer" type="text" class="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow" placeholder="Enter secret answer">
             </label>
 
             <button class="w-full py-3 font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
@@ -33,7 +51,7 @@
 
                 <span>Reset password</span>
             </button>
-            <p class="text-center">Not registered yet? <a href="#" class="text-indigo-600 font-medium inline-flex space-x-1 items-center"><span>Register now </span><span><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <p class="text-center">Not registered yet? <a href="../screens/register.php" class="text-indigo-600 font-medium inline-flex space-x-1 items-center"><span>Register now </span><span><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg></span></a></p>
         </div>

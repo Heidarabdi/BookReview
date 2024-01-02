@@ -1,3 +1,23 @@
+<?php
+session_start();
+if(isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: ../screens/home.php");
+}
+
+if (isset($_SESSION['alert'])) {
+    $alertType = $_SESSION['alert']['type'] === 'error' ? 'red' : 'green';
+    echo '
+            <script>
+                alert("' . $_SESSION['alert']['message'] . '");
+            </script>
+    </div>
+    ';
+    unset($_SESSION['alert']); // remove the alert from the session
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,6 +29,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+
 
 <section class="bg-gray-100">
     <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -75,13 +96,16 @@
                     </p>
                 </div>
 
-                <form action="#" class="mt-8 grid grid-cols-6 gap-6">
+                <form class="mt-8 grid grid-cols-2 gap-6" action="../controllers/registerController.php" method="post" enctype="multipart/form-data">
                     <div class="col-span-6 sm:col-span-3">
                         <label for="FirstName" class="block text-sm font-medium text-gray-700">
                             First Name
                         </label>
 
                         <input
+                            aria-required="true"
+                            required
+                            pattern="[A-Za-z]+"
                             type="text"
                             id="FirstName"
                             name="first_name"
@@ -95,6 +119,9 @@
                         </label>
 
                         <input
+                            aria-required="true"
+                            required
+                            pattern="[A-Za-z]+"
                             type="text"
                             id="LastName"
                             name="last_name"
@@ -107,6 +134,8 @@
                         </label>
 
                         <input
+                            aria-required="true"
+                            required
                             type="text"
                             id="Username"
                             name="username"
@@ -118,6 +147,8 @@
                         <label for="Email" class="block text-sm font-medium text-gray-700"> Email </label>
 
                         <input
+                            aria-required="true"
+                            required
                             type="email"
                             id="Email"
                             name="email"
@@ -125,10 +156,30 @@
                         />
                     </div>
 
-                    <div class="col-span-6 sm:col-span-3">
+<!--                    phone number-->
+                    <div class="col-span-12 sm:col-span-6">
+                        <label for="Phone" class="block text-sm font-medium text-gray-700"> Phone </label>
+
+                        <input
+                            aria-required="true"
+                            required
+                            pattern="[0-9]{10}"
+                            min="10"
+                            max="10"
+                            type="tel"
+                            id="Phone"
+                            name="phone"
+                            class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-md p-3"
+                        />
+
+                    <div class="col-span-6 sm:col-span-6">
                         <label for="Password" class="block text-sm font-medium text-gray-700"> Password </label>
 
                         <input
+                            aria-required="true"
+                            required
+                            min="8"
+                            max="12"
                             type="password"
                             id="Password"
                             name="password"
@@ -136,12 +187,16 @@
                         />
                     </div>
 
-                    <div class="col-span-6 sm:col-span-3">
+                    <div class="col-span-6 sm:col-span-6">
                         <label for="PasswordConfirmation" class="block text-sm font-medium text-gray-700">
                             Password Confirmation
                         </label>
 
                         <input
+                            aria-required="true"
+                            required
+                            min="8"
+                            max="12"
                             type="password"
                             id="PasswordConfirmation"
                             name="password_confirmation"
@@ -150,12 +205,14 @@
                     </div>
 
                     <!-- Enter a secret answer -->
-                    <div class="col-span-12 sm:col-span-6">
+                    <div class="col-span-3 sm:col-span-6">
                         <label for="SecretAnswer" class="block text-sm font-medium text-gray-700">
                             Secret Answer
                         </label>
 
                         <input
+                            aria-required="true"
+                            required
                             type="text"
                             id="SecretAnswer"
                             name="secret_answer"
@@ -163,7 +220,7 @@
                         />
                     </div>
 
-                    <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
+                    <div class="col-span-6 sm:flex sm:items-center sm:gap-4 mt-4">
                         <button
                             class="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
                         >
@@ -172,7 +229,7 @@
 
                         <p class="mt-4 text-md text-gray-500 sm:mt-0">
                             Already have an account?
-                            <a href="#" class="text-gray-700 underline">Log in</a>.
+                            <a href="login.php" class="text-gray-700 underline">Log in</a>.
                         </p>
                     </div>
                 </form>

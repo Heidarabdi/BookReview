@@ -1,3 +1,23 @@
+<?php
+session_start();
+if(isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: ../screens/home.php");
+}
+
+if (isset($_SESSION['alert'])) {
+    $alertType = $_SESSION['alert']['type'] === 'error' ? 'red' : 'green';
+    echo '
+            <script>
+                alert("' . $_SESSION['alert']['message'] . '");
+            </script>
+    </div>
+    ';
+    unset($_SESSION['alert']); // remove the alert from the session
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -45,14 +65,17 @@
                     Book Review is a website where you can find your favorite book and read it. Give your review and share it with your friends.
                 </p>
 
-                <form action="#" class="mt-8 grid grid-cols-6 gap-6">
+                <form class="mt-8 grid grid-cols-6 gap-6" action="../controllers/loginController.php" method="POST" enctype="multipart/form-data">
                     <div class="col-span-6">
-                        <label for="Email" class="block text-sm font-medium text-gray-700"> Email </label>
+                        <label for="username" class="block text-sm font-medium text-gray-700"> Username </label>
 
                         <input
-                            type="email"
-                            id="Email"
-                            name="email"
+                            value="<?php echo isset($_COOKIE['username']) ? $_COOKIE['username'] : '' ?>"
+                            aria-required="true"
+                            required
+                            type="text"
+                            id="username"
+                            name="username"
                             class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-md p-3"
                         />
                     </div>
@@ -61,6 +84,9 @@
                         <label for="Password" class="block text-sm font-medium text-gray-700"> Password </label>
 
                         <input
+                            value="<?php echo isset($_COOKIE['password']) ? $_COOKIE['password'] : '' ?>"
+                            aria-required="true"
+                            required
                             type="password"
                             id="Password"
                             name="password"
@@ -76,18 +102,25 @@
                                 class="h-5 w-5 rounded-md border-gray-200 bg-white shadow-sm mr-2"
                             />
 
-                            <span class="text-sm text-gray-700"> Remember Me 30 days</span>
+                            <span class="text-sm text-gray-700"> Remember Me 5 minutes</span>
                         </label>
                     </div>
 
+<!--                    Forget password -->
+                    <div class="col-span-6">
+                        <a href="forgetPassword.php" class="text-sm text-gray-700 hover:underline">Forget password?</a>
+                    </div>
+
+
                     <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-                        <button class="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                            Create an account
+                        <button
+                             class="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500   ">
+                            Login
                         </button>
 
                         <p class="mt-4 text-md text-gray-500 sm:mt-0">
                             Already have an account?
-                            <a href="#" class="text-gray-700 underline">Log in</a>.
+                            <a href="register.php" class="text-gray-700 underline">Sign Up </a>.
                         </p>
                     </div>
                 </form>
